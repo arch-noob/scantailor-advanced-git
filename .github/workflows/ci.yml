@@ -1,0 +1,36 @@
+---
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    name: Validate a Pull Request
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      # - name: Validate PKGBUILD
+      #   id: validate-pkgbuild
+      #   uses: 2m/arch-pkgbuild-builder@v1.18
+      #   with:
+      #     target: "pkgbuild"
+      #     pkgname: "./"
+
+      # - name: Validate SRCINFO
+      #   id: validate-srcinfo
+      #   uses: 2m/arch-pkgbuild-builder@v1.18
+      #   with:
+      #     target: "srcinfo"
+      #     pkgname: "./"
+
+      - name: yaml-lint
+        uses: ibiqlik/action-yamllint@v0.0.2
+        with:
+          file_or_dir: .github/workflows/ci.yml
