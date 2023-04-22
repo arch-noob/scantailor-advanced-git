@@ -1,3 +1,5 @@
+# Maintainer: Roman Vasilev <2rvasilev at live dot ru>
+
 pkgname=scantailor-advanced-git
 pkgver=v1.0.18.r16.gdc6f160
 pkgrel=2

@@ -1,7 +1,7 @@
 ---
-name: ci
+name: makepkg
 
-on: [push, pull_request]
+on: [push]
 
 jobs:
   pkgbuild:
@@ -21,6 +21,12 @@ jobs:
         run: |
           echo "Successfully created the following package archive"
           echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          path: ${{ steps.makepkg.outputs.pkgfile0 }}
     # Uncomment to upload the package as an artifact
     # - name: Upload Package Archive
     #   uses: actions/upload-artifact@v2
