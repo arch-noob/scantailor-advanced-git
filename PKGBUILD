@@ -15,6 +15,7 @@ depends=(
     "zlib"
     )
 makedepends=(
+    "git"
     "boost"
     "cmake"
     "qt5-tools"
