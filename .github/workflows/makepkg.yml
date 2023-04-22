@@ -1,7 +1,10 @@
 ---
 name: makepkg
 
-on: [push]
+on:
+  push:
+    tags:
+      - v**
 
 jobs:
   pkgbuild:
@@ -17,11 +20,10 @@ jobs:
         id: makepkg
         uses: edlanglois/pkgbuild-action@v1
 
-      - name: Print Package Files
-        run: |
-          echo "Successfully created the following package archive"
-          echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
-
+      # - name: Print Package Files
+      #   run: |
+      #     echo "Successfully created the following package archive"
+      #     echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
       - name: Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
