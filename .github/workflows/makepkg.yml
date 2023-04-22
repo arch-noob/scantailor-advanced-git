@@ -26,7 +26,9 @@ jobs:
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          path: ${{ steps.makepkg.outputs.pkgfile0 }}
+          files: ${{ steps.makepkg.outputs.pkgfile0 }}
+        # env:
+        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     # Uncomment to upload the package as an artifact
     # - name: Upload Package Archive
     #   uses: actions/upload-artifact@v2
