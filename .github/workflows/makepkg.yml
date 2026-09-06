@@ -3,36 +3,39 @@ name: makepkg
 
 on:
   push:
+    branches:
+      - master
     tags:
-      - v**
+      - 'v**'
+  workflow_dispatch:
+
+permissions:
+  contents: write
 
 jobs:
   pkgbuild:
+    runs-on: ubuntu-latest
     env:
       MAKEFLAGS: -j$(nproc)
-      GITFLAGS: --filter=tree:0
-    runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
 
       - name: Makepkg Build and Check
         id: makepkg
-        uses: edlanglois/pkgbuild-action@v1
+        # edlanglois/pkgbuild-action is mostly unmaintained (Nov 2024), but
+        # the v1.1.x interface (pkgfile* outputs, SRCINFO check) is stable.
+        uses: edlanglois/pkgbuild-action@v1.1.9
 
-      # - name: Print Package Files
-      #   run: |
-      #     echo "Successfully created the following package archive"
-      #     echo "Package: ${{ steps.makepkg.outputs.pkgfile0 }}"
+      - name: Upload Package Archive
+        uses: actions/upload-artifact@v7
+        with:
+          name: package
+          path: ${{ steps.makepkg.outputs.pkgfile0 }}
+          if-no-files-found: error
+
       - name: Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         if: startsWith(github.ref, 'refs/tags/')
         with:
           files: ${{ steps.makepkg.outputs.pkgfile0 }}
-        # env:
-        # GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-    # Uncomment to upload the package as an artifact
-    # - name: Upload Package Archive
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     path: ${{ steps.makepkg.outputs.pkgfile0 }}
