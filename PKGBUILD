@@ -2,7 +2,7 @@
 
 pkgname=scantailor-advanced-git
 pkgver=v1.0.18
-pkgrel=4
+pkgrel=5
 pkgdesc="Interactive post-processing tool for scanned pages that merges the features of the ScanTailor Featured and ScanTailor Enhanced versions, brings new ones and fixes. "
 arch=("x86_64")
 options=('!lto')
@@ -27,7 +27,8 @@ makedepends=(
 provides=("scantailor")
 conflicts=("scantailor-advanced" "scantailor")
 #source=("scantailor-advanced::git+https://github.com/4lex4/scantailor-advanced")
-source=("$pkgname::git+https://github.com/ScanTailor-Advanced/scantailor-advanced.git#tag=$pkgver")
+# v1.0.18 + EdgeDiv binarization merge (upstream feature #47, commit fc2e00fe) on fork develop branch
+source=("$pkgname::git+https://github.com/arch-noob/scantailor-advanced.git#branch=develop")
 
 sha256sums=('SKIP')
 
