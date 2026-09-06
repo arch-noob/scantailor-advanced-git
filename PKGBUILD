@@ -2,15 +2,16 @@
 
 pkgname=scantailor-advanced-git
 pkgver=v1.0.18
-pkgrel=3
+pkgrel=4
 pkgdesc="Interactive post-processing tool for scanned pages that merges the features of the ScanTailor Featured and ScanTailor Enhanced versions, brings new ones and fixes. "
 arch=("x86_64")
+options=('!lto')
 #url="https://github.com/4lex4/scantailor-advanced"
 url="https://github.com/ScanTailor-Advanced/scantailor-advanced"
 license=("GPL3")
 depends=(
     "boost-libs"
-    "libjpeg"
+    "libjpeg-turbo"
     "libpng"
     "libtiff"
     "qt5-base"
@@ -42,12 +43,15 @@ build() {
     # export CXXFLAGS="-fPIC"
 
     cd "${srcdir}/${pkgname}"
-    sed -i "s/#define VERSION .*$/#define VERSION \"$pkgver\"/" version.h.in
+    sed -i "s/#define VERSION .*$/#define VERSION \"$pkgver-GIT\"/" version.h.in
+    # https://bitbucket.org/fenics-project/dolfin/issues/1115/compile-error-min_element-is-not-member-of
+    sed -i '/^#include <cmath>.*/i #include <algorithm>' src/foundation/Proximity.h
     # https://aur.archlinux.org/packages/scantailor-advanced-git/#comment-831404
+    rm -rf build
     mkdir build && cd build
     cmake -G "Unix Makefiles" ..
-    cmake --build .
-    make
+    # cmake --build .
+    make -j${nproc}
 }
 
 package() {
